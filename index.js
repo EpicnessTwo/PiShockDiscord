@@ -29,6 +29,7 @@ client.on('interactionCreate', async interaction => {
     if (commandName === 'shock' || commandName === 'vibrate') {
         const intensity = options.getInteger('intensity');
         const duration = options.getInteger('duration');
+        const user = options.getString('user');
         if (intensity < 1 || intensity > 100) {
             await interaction.reply('Intensity must be between 1 and 100.');
             return;
@@ -40,20 +41,43 @@ client.on('interactionCreate', async interaction => {
         }
 
         let op;
+        let visualOp;
 
         switch (commandName) {
             case 'shock':
                 op = 0;
+                visualOp = 'Shocking'
                 break;
             case 'vibrate':
                 op = 1;
+                visualOp = 'Vibrating'
                 break;
         }
 
-        const response = await triggerPiShock(commandName, op, intensity, duration);
-        await interaction.reply(response);
+        if (user === 'all' || !user) {
+            // Shock everyone!
+            for (const pishock_user of config.pishock_users) {
+                console.log(pishock_user);
+                await triggerPiShock(commandName, op, visualOp, intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode, pishock_user.pishockApiKey);
+                logAction(interaction.user.id, commandName, intensity, duration, pishock_user.pishockUsername);
+            }
 
-        logAction(interaction.user.id, commandName, intensity, duration);
+            await interaction.reply(`${visualOp} **everyone** with intensity ${intensity} and a duration of ${duration}!`);
+        } else {
+            let found = false;
+            for (const pishock_user of config.pishock_users) {
+                if (pishock_user.pishockUsername === user) {
+                    const response = await triggerPiShock(commandName, op, visualOp, intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode, pishock_user.pishockApiKey);
+                    await interaction.reply(response);
+                    logAction(interaction.user.id, commandName, intensity, duration, pishock_user.pishockUsername);
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                await interaction.reply('User not found.');
+            }
+        }
     } else if (commandName === 'beep') {
         const duration = options.getInteger('duration');
 
@@ -72,12 +96,12 @@ client.on('interactionCreate', async interaction => {
         try {
             const db = await dbPromise;
             const rows = await db.all(
-                `SELECT discord_user_id, SUM(duration) as total_duration 
-                 FROM logs 
-                 WHERE type IN ('shock', 'vibrate') 
-                 GROUP BY discord_user_id 
-                 ORDER BY total_duration DESC 
-                 LIMIT 10`
+                `SELECT discord_user_id, SUM(duration) as total_duration
+                 FROM logs
+                 WHERE type IN ('shock', 'vibrate')
+                 GROUP BY discord_user_id
+                 ORDER BY total_duration DESC
+                     LIMIT 10`
             );
 
             // Creating an embed
@@ -103,19 +127,38 @@ client.on('interactionCreate', async interaction => {
             console.error('Failed to retrieve stats:', error);
             await interaction.reply('Failed to retrieve stats.');
         }
+    } else if (interaction.commandName === 'list') {
+        try {
+            // Creating an embed
+            const statsEmbed = new EmbedBuilder()
+                .setColor(0x0099ff) // Use a hexadecimal color
+                .setTitle('Connected PiShock Users')
+                .setTimestamp();
+
+            let index = 1;
+            for (const pishock_user of config.pishock_users) {
+                statsEmbed.addFields({ name: '#' + index, value: pishock_user.pishockUsername, inline: false });
+                index++;
+            }
+
+            await interaction.reply({ embeds: [statsEmbed] });
+        } catch (error) {
+            console.error('Failed to retrieve stats:', error);
+            await interaction.reply('Failed to retrieve stats.');
+        }
     }
 });
 
-async function triggerPiShock(action, op, intensity, duration) {
+async function triggerPiShock(action, op, visualOp, intensity, duration, username, sharecode, apikey) {
     try {
         const data = {
             Op: op,
             intensity: intensity,
             duration: duration ?? 1,
-            Username: config.pishockUsername,
+            Username: username,
             Name: config.pishockAppName,
-            Code: config.pishockShareCode,
-            Apikey: config.pishockApiKey,
+            Code: sharecode,
+            Apikey: apikey,
         }
 
         console.log(data);
@@ -126,19 +169,19 @@ async function triggerPiShock(action, op, intensity, duration) {
             console.log(response.data);
         }
 
-        return `Successfully performed ${action} with intensity ${intensity} and a duration if ${duration}!`; // Customize the response
+        return `${visualOp} **${username}** with intensity ${intensity} and a duration of ${duration}!`; // Customize the response
     } catch (error) {
         console.error('Error triggering PiShock:', error);
         return `Failed to perform ${action}.`;
     }
 }
 
-async function logAction(userId, actionType, intensity, duration) {
+async function logAction(userId, actionType, intensity, duration, username) {
     const db = await dbPromise;
-    const query = `INSERT INTO logs (discord_user_id, type, intensity, duration) VALUES (?, ?, ?, ?)`;
+    const query = `INSERT INTO logs (discord_user_id, type, intensity, duration, pishock_user) VALUES (?, ?, ?, ?, ?)`;
 
     try {
-        await db.run(query, [userId, actionType, intensity, duration]);
+        await db.run(query, [userId, actionType, intensity, duration, username]);
         console.log('Action logged successfully.');
     } catch (err) {
         console.error('Error logging action:', err.message);
@@ -154,6 +197,7 @@ async function initializeDatabase() {
     await db.exec(`CREATE TABLE IF NOT EXISTS logs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         discord_user_id TEXT NOT NULL,
+        pishock_user TEXT NOT NULL,
         type TEXT NOT NULL,
         intensity INTEGER NOT NULL,
         duration INTEGER NOT NULL,

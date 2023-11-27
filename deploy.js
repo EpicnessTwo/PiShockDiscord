@@ -5,7 +5,7 @@ const { discordClientId, discordGuildId, discordToken } = require('./config.json
 const commands = [
     {
         name: 'shock',
-        description: 'Activate the shock with a specified intensity',
+        description: 'Activate the shock with a specified intensity and duration (optional: user)',
         options: [{
             name: 'intensity',
             type: 4,
@@ -16,6 +16,11 @@ const commands = [
             type: 4,
             description: 'The duration of the shock (1-15)',
             required: true,
+        }, {
+            name: 'user',
+            type: 3,
+            description: 'The user to shock (optional)',
+            required: false,
         }],
     },
     {
@@ -31,6 +36,11 @@ const commands = [
             type: 4,
             description: 'The duration of the vibration (1-15)',
             required: true,
+        }, {
+            name: 'user',
+            type: 3,
+            description: 'The user to vibrate (optional)',
+            required: false,
         }],
     },
     {
@@ -41,16 +51,21 @@ const commands = [
             type: 4,
             description: 'The duration of the beep (1-15)',
             required: true,
+        }, {
+            name: 'user',
+            type: 3,
+            description: 'The user to shock (optional)',
+            required: false,
         }],
-    },
-    {
-        name: 'info',
-        description: 'Get information about the PiShock device',
     },
     {
         name: 'stats',
         description: 'Get stats about the top 10 users',
     },
+    {
+        name: 'list',
+        description: 'List all of the known PiShock Users',
+    }
 ];
 
 const rest = new REST({ version: '9' }).setToken(discordToken);
