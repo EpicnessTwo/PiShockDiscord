@@ -4,10 +4,16 @@
 > This bot is very very alpha. The instructions are not complete and the bot is not ready for use. Please wait for a stable release.
 
 PiShockDiscord is a Discord bot designed to interact with the PiShock API, allowing users to control PiShock devices through Discord slash commands. The bot supports commands such as /shock, /vibrate, /beep, and /info, with options to specify the intensity and duration of the actions.
+
+## Features
+
 Features
 
- - Slash Commands: Easy-to-use slash commands for controlling PiShock devices.
- - Customizable: Intensity and duration parameters for actions.
+ - Trigger shocks, vibrations, and beeps on PiShock devices.
+ - Configure intensity and duration for each action.
+ - Restrict access to certain users and provide admin capabilities.
+ - Store logs in a SQLite database.
+ - Fetch and display usage statistics.
 
 ## Commands
 | Command  | Description                             |
@@ -41,14 +47,14 @@ Before you begin, ensure you have met the following requirements:
 
 ## Installation
 
-1. Clone the Repository
+#### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/EpicnessTwo/PiShockDiscord.git
 cd PiShockDiscord
 ```
 
-2. Install Dependencies
+#### 2. Install Dependencies
 
 Navigate to the project directory and install the required npm packages:
 
@@ -56,12 +62,40 @@ Navigate to the project directory and install the required npm packages:
 npm install
 ```
 
-3. Configuration
+#### 3. Configuration
 
-    Copy config.example.json to config.json:
+Copy config.example.json to config.json:
 
 ```bash
 cp config.example.json config.json
 ```
 
 Edit config.json and fill in your Discord bot token, PiShock API credentials, and other necessary information.
+
+#### 4. Publish the slash commands
+
+```bash
+node deploy.js
+```
+
+#### 5. Start the bot
+
+```bash
+node index.js
+```
+
+## Database Setup
+
+The bot automatically initializes the SQLite database to store logs. Ensure you have write permissions in the bot's directory.
+
+## Contribution
+
+Feel free to fork the repository and submit pull requests.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Disclaimer
+
+This bot is intended for entertainment purposes. Use responsibly and ensure all participants have given consent for its use.
