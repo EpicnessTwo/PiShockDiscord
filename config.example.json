@@ -2,7 +2,7 @@
   "discordGuildId": "DISCORD_GUILD_ID",
   "discordClientId": "DISCORD_CLIENT_ID",
   "discordToken": "DISCORD_TOKEN",
-  "pishockAppName": "PISHOCK_APP_NAME",
+  "pishockAppName": "PiShockDiscordBot",
   "pishockApiKey": "PISHOCK_API_KEY",
   "pishockUsername": "PISHOCK_USERNAME",
   "pishock_users": []
