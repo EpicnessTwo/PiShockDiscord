@@ -62,7 +62,6 @@ client.on('interactionCreate', async interaction => {
         if (user === 'all' || !user) {
             // Shock everyone!
             for (const pishock_user of config.pishock_users) {
-                console.log(pishock_user);
                 await triggerPiShock(commandName, op, visualOp, intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
                 logAction(interaction.user.id, commandName, intensity, duration, pishock_user.pishockUsername);
             }
@@ -167,12 +166,10 @@ async function triggerPiShock(action, op, visualOp, intensity, duration, usernam
             Apikey: config.pishockApiKey,
         }
 
-        console.log(data);
-
         const response = await axios.post('https://do.pishock.com/api/apioperate/', data);
 
         if (response.status === 200) {
-            console.log(response.data);
+            // TODO: Check response data
         }
 
         return `${visualOp} **${username}** with intensity ${intensity} and a duration of ${duration}!`; // Customize the response
