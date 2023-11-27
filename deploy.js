@@ -47,6 +47,10 @@ const commands = [
         name: 'info',
         description: 'Get information about the PiShock device',
     },
+    {
+        name: 'stats',
+        description: 'Get stats about the top 10 users',
+    },
 ];
 
 const rest = new REST({ version: '9' }).setToken(discordToken);
