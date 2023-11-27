@@ -151,6 +151,27 @@ client.on('interactionCreate', async interaction => {
         // Save the config file
         fs.writeFileSync('./config.json', JSON.stringify(config, null, 4));
         await interaction.reply(`Added user ${username}!`);
+    } else if (interaction.commandName === 'debug') {
+        const user = options.getString('user');
+
+        if (!user) {
+            await interaction.reply('User is required.');
+            return;
+        }
+
+        let found = false;
+        for (const pishock_user of config.pishock_users) {
+            if (pishock_user.pishockUsername === user) {
+                const response = await debugPiShock(pishock_user.pishockShareCode);
+                await interaction.reply(response);
+                console.log(response);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            await interaction.reply('User not found.');
+        }
     }
 });
 
@@ -176,6 +197,27 @@ async function triggerPiShock(action, op, visualOp, intensity, duration, usernam
     } catch (error) {
         console.error('Error triggering PiShock:', error);
         return `Failed to perform ${action}.`;
+    }
+}
+
+async function debugPiShock(sharecode) {
+    try {
+        const data = {
+            Username: config.pishockUsername,
+            Code: sharecode,
+            Apikey: config.pishockApiKey,
+        }
+
+        const response = await axios.post('https://do.pishock.com/api/apioperate/', data);
+
+        if (response.status === 200) {
+            // TODO: Check response data
+        }
+
+        return response.data;
+    } catch (error) {
+        console.error('Error debugging PiShock:', error);
+        return `Failed to perform debug.`;
     }
 }
 

@@ -74,6 +74,16 @@ const commands = [
         }]
     },
     {
+        name: 'debug',
+        description: 'Debug the PiShock device',
+        options: [{
+            name: 'user',
+            type: 3,
+            description: 'The user to debug',
+            required: true,
+        }]
+    },
+    {
         name: 'stats',
         description: 'Get stats about the top 10 users',
     },
