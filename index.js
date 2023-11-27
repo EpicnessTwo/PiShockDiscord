@@ -3,6 +3,7 @@ const axios = require('axios');
 const config = require('./config.json');
 const sqlite3 = require('sqlite3').verbose();
 const { open } = require('sqlite');
+const fs = require('fs');
 
 const dbPromise = initializeDatabase();
 
@@ -62,7 +63,7 @@ client.on('interactionCreate', async interaction => {
             // Shock everyone!
             for (const pishock_user of config.pishock_users) {
                 console.log(pishock_user);
-                await triggerPiShock(commandName, op, visualOp, intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode, pishock_user.pishockApiKey);
+                await triggerPiShock(commandName, op, visualOp, intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
                 logAction(interaction.user.id, commandName, intensity, duration, pishock_user.pishockUsername);
             }
 
@@ -71,7 +72,7 @@ client.on('interactionCreate', async interaction => {
             let found = false;
             for (const pishock_user of config.pishock_users) {
                 if (pishock_user.pishockUsername === user) {
-                    const response = await triggerPiShock(commandName, op, visualOp, intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode, pishock_user.pishockApiKey);
+                    const response = await triggerPiShock(commandName, op, visualOp, intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
                     await interaction.reply(response);
                     logAction(interaction.user.id, commandName, intensity, duration, pishock_user.pishockUsername);
                     found = true;
@@ -138,19 +139,32 @@ client.on('interactionCreate', async interaction => {
             console.error('Failed to retrieve stats:', error);
             await interaction.reply('Failed to retrieve stats.');
         }
+    } else if (interaction.commandName === 'add') {
+        const username = options.getString('username');
+        const sharecode = options.getString('sharecode');
+
+        if (!username || !sharecode) {
+            await interaction.reply('Username and sharecode are required.');
+            return;
+        }
+
+        config.pishock_users.push({ pishockUsername: username, pishockShareCode: sharecode });
+        // Save the config file
+        fs.writeFileSync('./config.json', JSON.stringify(config, null, 4));
+        await interaction.reply(`Added user ${username}!`);
     }
 });
 
-async function triggerPiShock(action, op, visualOp, intensity, duration, username, sharecode, apikey) {
+async function triggerPiShock(action, op, visualOp, intensity, duration, username, sharecode) {
     try {
         const data = {
             Op: op,
             intensity: intensity,
             duration: duration ?? 1,
-            Username: username,
+            Username: config.pishockUsername,
             Name: config.pishockAppName,
             Code: sharecode,
-            Apikey: apikey,
+            Apikey: config.pishockApiKey,
         }
 
         console.log(data);

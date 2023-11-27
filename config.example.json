@@ -3,11 +3,7 @@
   "discordClientId": "DISCORD_CLIENT_ID",
   "discordToken": "DISCORD_TOKEN",
   "pishockAppName": "PISHOCK_APP_NAME",
-  "pishock_users": [
-    {
-      "pishockApiKey": "PISHOCK_API_KEY",
-      "pishockUsername": "PISHOCK_USERNAME",
-      "pishockShareCode": "PISHOCK_SHARE_CODE"
-    }
-  ]
+  "pishockApiKey": "PISHOCK_API_KEY",
+  "pishockUsername": "PISHOCK_USERNAME",
+  "pishock_users": []
 }

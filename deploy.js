@@ -59,6 +59,21 @@ const commands = [
         }],
     },
     {
+        name: 'add',
+        description: 'Add a new PiShock User',
+        options: [{
+            name: 'username',
+            type: 3,
+            description: 'The username of the PiShock User',
+            required: true,
+        }, {
+            name: 'sharecode',
+            type: 3,
+            description: 'The share code of the PiShock User',
+            required: true,
+        }]
+    },
+    {
         name: 'stats',
         description: 'Get stats about the top 10 users',
     },
