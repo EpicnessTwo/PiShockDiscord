@@ -1,4 +1,4 @@
-# PiShockDiscord
+# PiShockDiscord (Alpha)
 
 PiShockDiscord is a Discord bot designed to interact with the PiShock API, allowing users to control PiShock devices through Discord slash commands. The bot supports commands such as /shock, /vibrate, /beep, and /info, with options to specify the intensity and duration of the actions.
 Features
