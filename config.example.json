@@ -1,0 +1,9 @@
+{
+  "discordGuildId": "DISCORD_GUILD_ID",
+  "discordClientId": "DISCORD_CLIENT_ID",
+  "discordToken": "DISCORD_TOKEN",
+  "pishockApiKey": "PISHOCK_API_KEY",
+  "pishockUsername": "PISHOCK_USERNAME",
+  "pishockShareCode": "PISHOCK_SHARE_CODE",
+  "pishockAppName": "PISHOCK_APP_NAME",
+}
