@@ -74,6 +74,16 @@ const commands = [
         }]
     },
     {
+        name: 'remove',
+        description: 'Remove a new PiShock User',
+        options: [{
+            name: 'username',
+            type: 3,
+            description: 'The username of the PiShock User',
+            required: true,
+        }]
+    },
+    {
         name: 'debug',
         description: 'Debug the PiShock device',
         options: [{

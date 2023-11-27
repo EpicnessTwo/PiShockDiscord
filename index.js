@@ -147,10 +147,50 @@ client.on('interactionCreate', async interaction => {
             return;
         }
 
-        config.pishock_users.push({ pishockUsername: username, pishockShareCode: sharecode });
-        // Save the config file
+        let found = false;
+        for (let i = 0; i < config.pishock_users.length; i++) {
+            const pishock_user = config.pishock_users[i];
+            if (pishock_user.pishockUsername === username) {
+                config.pishock_users[i].pishockShareCode = sharecode;
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            // Save the config file
+            await interaction.reply(`Updated user ${username}!`);
+        } else {
+            config.pishock_users.push({ pishockUsername: username, pishockShareCode: sharecode });
+            await interaction.reply(`Added user ${username}!`);
+        }
+
         fs.writeFileSync('./config.json', JSON.stringify(config, null, 4));
-        await interaction.reply(`Added user ${username}!`);
+    } else if (interaction.commandName === 'remove') {
+        const username = options.getString('username');
+
+        if (!username) {
+            await interaction.reply('Username is required.');
+            return;
+        }
+
+        let found = false;
+        for (let i = 0; i < config.pishock_users.length; i++) {
+            const pishock_user = config.pishock_users[i];
+            if (pishock_user.pishockUsername === username) {
+                config.pishock_users.splice(i, 1);
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            // Save the config file
+            fs.writeFileSync('./config.json', JSON.stringify(config, null, 4));
+            await interaction.reply(`Removed user ${username}!`);
+        } else {
+            await interaction.reply('User not found.');
+        }
     } else if (interaction.commandName === 'debug') {
         const user = options.getString('user');
 
