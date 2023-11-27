@@ -26,8 +26,8 @@ client.on('interactionCreate', async interaction => {
 
     const { commandName, options } = interaction;
 
-    if (commandName === 'shock' || commandName === 'vibrate') {
-        const intensity = options.getInteger('intensity');
+    if (commandName === 'shock' || commandName === 'vibrate' || commandName === 'beep') {
+        const intensity = options.getInteger('intensity') ?? 1;
         const duration = options.getInteger('duration');
         const user = options.getString('user');
         if (intensity < 1 || intensity > 100) {
@@ -51,6 +51,10 @@ client.on('interactionCreate', async interaction => {
             case 'vibrate':
                 op = 1;
                 visualOp = 'Vibrating'
+                break;
+            case 'beep':
+                op = 2;
+                visualOp = 'Beeping'
                 break;
         }
 
@@ -78,18 +82,6 @@ client.on('interactionCreate', async interaction => {
                 await interaction.reply('User not found.');
             }
         }
-    } else if (commandName === 'beep') {
-        const duration = options.getInteger('duration');
-
-        if (duration < 1 || duration > 15) {
-            await interaction.reply('Duration must be between 1 and 15.');
-            return;
-        }
-
-        const response = await triggerPiShock(commandName, 2, 0, duration);
-        await interaction.reply(response);
-
-        logAction(interaction.user.id, commandName, 0, duration);
     } else if (commandName === 'info') {
         await interaction.reply('Here is some info about the PiShock device...');
     } else if (interaction.commandName === 'stats') {
