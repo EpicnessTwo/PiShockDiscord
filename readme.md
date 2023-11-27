@@ -1,4 +1,5 @@
 # PiShockDiscord (Alpha)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U1RLHUW)
 
 > This bot is very very alpha. The instructions are not complete and the bot is not ready for use. Please wait for a stable release.
 
