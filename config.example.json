@@ -6,5 +6,6 @@
   "pishockAppName": "PiShockDiscordBot",
   "pishockApiKey": "PISHOCK_API_KEY",
   "pishockUsername": "PISHOCK_USERNAME",
-  "pishock_users": []
+  "pishock_users": [],
+  "banned_users": [],
 }

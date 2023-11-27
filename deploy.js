@@ -98,6 +98,26 @@ const commands = [
         }]
     },
     {
+        name: 'shockban',
+        description: '(Admin) Ban a user from using the shock',
+        options: [{
+            name: 'username',
+            type: 6,
+            description: 'The username of the PiShock User',
+            required: true,
+        }]
+    },
+    {
+        name: 'shockunban',
+        description: '(Admin) Unban a user from using the shock',
+        options: [{
+            name: 'username',
+            type: 6,
+            description: 'The username of the PiShock User',
+            required: true,
+        }]
+    },
+    {
         name: 'debug',
         description: 'Debug the PiShock device',
         options: [{
