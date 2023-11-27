@@ -8,6 +8,27 @@ Features
  - Slash Commands: Easy-to-use slash commands for controlling PiShock devices.
  - Customizable: Intensity and duration parameters for actions.
 
+## Commands
+| Command  | Description                             |
+|----------|-----------------------------------------|
+| /shock   | Shock one/all device(s).                |
+| /vibrate | Vibrate one/all device(s).              |
+| /beep    | Beep one/all device(s).                 |
+| /add     | Add your device to the database.        |
+| /remove  | Remove your device from the database.   |
+| /debug   | Get information about a device.         |
+| /stats   | Generate a list of the top 10 shockers! |
+| /list    | List all devices in the database.       |
+
+
+| Admin Commands | Description                        |
+|----------------|------------------------------------|
+| /adminadd      | Add a device to the database.      |
+| /adminremove   | Remove a device from the database. |
+| /shockban      | Ban a user from using the bot.     |
+| /shockunban    | Unban a user from using the bot.   |
+
+
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
