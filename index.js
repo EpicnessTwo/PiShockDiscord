@@ -82,8 +82,6 @@ client.on('interactionCreate', async interaction => {
                 await interaction.reply('User not found.');
             }
         }
-    } else if (commandName === 'info') {
-        await interaction.reply('Here is some info about the PiShock device...');
     } else if (interaction.commandName === 'stats') {
         try {
             const db = await dbPromise;
@@ -138,9 +136,18 @@ client.on('interactionCreate', async interaction => {
             console.error('Failed to retrieve stats:', error);
             await interaction.reply('Failed to retrieve stats.');
         }
-    } else if (interaction.commandName === 'add') {
-        const username = options.getString('username');
+    } else if (interaction.commandName === 'add' || interaction.commandName === 'adminadd') {
+        const username = (interaction.commandName === 'add') ? interaction.user.username : options.getString('username');
         const sharecode = options.getString('sharecode');
+
+        // Check if the admin is adding a user
+        if (interaction.commandName === 'adminadd') {
+            const admin = interaction.member;
+            if (!admin.roles.cache.some(role => role.id === config.discordAdminRoleId)) {
+                await interaction.reply('You must be an admin to use this command.');
+                return;
+            }
+        }
 
         if (!username || !sharecode) {
             await interaction.reply('Username and sharecode are required.');
@@ -166,8 +173,17 @@ client.on('interactionCreate', async interaction => {
         }
 
         fs.writeFileSync('./config.json', JSON.stringify(config, null, 4));
-    } else if (interaction.commandName === 'remove') {
-        const username = options.getString('username');
+    } else if (interaction.commandName === 'remove' || interaction.commandName === 'adminremove') {
+        const username = (interaction.commandName === 'remove') ? interaction.user.username : options.getString('username');
+
+        // Check if the admin is adding a user
+        if (interaction.commandName === 'adminremove') {
+            const admin = interaction.member;
+            if (!admin.roles.cache.some(role => role.id === config.discordAdminRoleId)) {
+                await interaction.reply('You must be an admin to use this command.');
+                return;
+            }
+        }
 
         if (!username) {
             await interaction.reply('Username is required.');

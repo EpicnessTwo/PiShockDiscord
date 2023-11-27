@@ -1,5 +1,6 @@
 {
   "discordGuildId": "DISCORD_GUILD_ID",
+  "discordAdminRoleId": "DISCORD_ADMIN_ROLE_ID",
   "discordClientId": "DISCORD_CLIENT_ID",
   "discordToken": "DISCORD_TOKEN",
   "pishockAppName": "PiShockDiscordBot",

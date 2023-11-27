@@ -60,6 +60,20 @@ const commands = [
     },
     {
         name: 'add',
+        description: 'Add your PiShock User',
+        options: [{
+            name: 'sharecode',
+            type: 3,
+            description: 'The share code of the PiShock User',
+            required: true,
+        }]
+    },
+    {
+        name: 'remove',
+        description: 'Remove your PiShock User'
+    },
+    {
+        name: 'adminadd',
         description: 'Add a new PiShock User',
         options: [{
             name: 'username',
@@ -74,7 +88,7 @@ const commands = [
         }]
     },
     {
-        name: 'remove',
+        name: 'adminremove',
         description: 'Remove a new PiShock User',
         options: [{
             name: 'username',
