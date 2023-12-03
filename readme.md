@@ -26,6 +26,7 @@ Features
 | /debug   | Get information about a device.         |
 | /stats   | Generate a list of the top 10 shockers! |
 | /list    | List all devices in the database.       |
+| /config  | Configure user levels.                  |
 
 
 | Admin Commands | Description                        |
