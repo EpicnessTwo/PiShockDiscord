@@ -6,6 +6,10 @@
   "pishockAppName": "PiShockDiscordBot",
   "pishockApiKey": "PISHOCK_API_KEY",
   "pishockUsername": "PISHOCK_USERNAME",
+  "defaultShockIntensity": 20,
+  "defaultShockDuration": 1,
+  "defaultVibrateIntensity": 20,
+  "defaultVibrateDuration": 1,
   "pishock_users": [],
-  "banned_users": [],
+  "banned_users": []
 }

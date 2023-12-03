@@ -140,22 +140,22 @@ const commands = [
         description: 'Set User configuration',
         options: [{
             name: 'maxshockintensity',
-            type: 3,
+            type: 4,
             description: 'The maximum shock intensity',
             required: false,
         }, {
             name: 'maxshockduration',
-            type: 3,
+            type: 4,
             description: 'The maximum shock duration',
             required: false,
         }, {
             name: 'maxvibrateintensity',
-            type: 3,
+            type: 4,
             description: 'The maximum vibration intensity',
             required: false,
         }, {
             name: 'maxvibrateduration',
-            type: 3,
+            type: 4,
             description: 'The maximum vibration duration',
             required: false,
         }]

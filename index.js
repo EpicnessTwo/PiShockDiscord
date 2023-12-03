@@ -182,8 +182,10 @@ async function commandShock(interaction, options) {
     if (user === 'all' || !user) {
         // Shock everyone!
         for (const pishock_user of config.pishock_users) {
-            await triggerPiShock('shock', 0, 'Shocking', intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
-            logAction(interaction.user.id, 'shock', intensity, duration, pishock_user.pishockUsername);
+            let shockIntensity = Math.min(intensity, pishock_user.max_shock_intensity);
+            let shockDuration = Math.min(duration, pishock_user.max_shock_duration);
+            await triggerPiShock('shock', 0, 'Shocking', shockIntensity, shockDuration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
+            logAction(interaction.user.id, 'shock', shockIntensity, shockDuration, pishock_user.pishockUsername);
         }
 
         await interaction.reply(`Shocking **everyone** with intensity ${intensity} and a duration of ${duration}!`);
@@ -191,9 +193,11 @@ async function commandShock(interaction, options) {
         let found = false;
         for (const pishock_user of config.pishock_users) {
             if (pishock_user.pishockUsername === user) {
-                const response = await triggerPiShock('shock', 0, 'Shocking', intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
+                let shockIntensity = Math.min(intensity, pishock_user.max_shock_intensity);
+                let shockDuration = Math.min(duration, pishock_user.max_shock_duration);
+                const response = await triggerPiShock('shock', 0, 'Shocking', shockIntensity, shockDuration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
                 await interaction.reply(response);
-                logAction(interaction.user.id, 'shock', intensity, duration, pishock_user.pishockUsername);
+                logAction(interaction.user.id, 'shock', shockIntensity, shockDuration, pishock_user.pishockUsername);
                 found = true;
             }
         }
@@ -221,8 +225,10 @@ async function commandVibrate(interaction, options) {
     if (user === 'all' || !user) {
         // Shock everyone!
         for (const pishock_user of config.pishock_users) {
-            await triggerPiShock('vibrate', 1, 'Vibrating', intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
-            logAction(interaction.user.id, 'vibrate', intensity, duration, pishock_user.pishockUsername);
+            let vibrateIntensity = Math.min(intensity, pishock_user.max_vibrate_intensity);
+            let vibrateDuration = Math.min(duration, pishock_user.max_vibrate_duration);
+            await triggerPiShock('vibrate', 1, 'Vibrating', vibrateIntensity, vibrateDuration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
+            logAction(interaction.user.id, 'vibrate', vibrateIntensity, vibrateDuration, pishock_user.pishockUsername);
         }
 
         await interaction.reply(`Vibrating **everyone** with intensity ${intensity} and a duration of ${duration}!`);
@@ -230,9 +236,11 @@ async function commandVibrate(interaction, options) {
         let found = false;
         for (const pishock_user of config.pishock_users) {
             if (pishock_user.pishockUsername === user) {
-                const response = await triggerPiShock('vibrate', 1, 'Vibrating', intensity, duration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
+                let vibrateIntensity = Math.min(intensity, pishock_user.max_vibrate_intensity);
+                let vibrateDuration = Math.min(duration, pishock_user.max_vibrate_duration);
+                const response = await triggerPiShock('vibrate', 1, 'Vibrating', vibrateIntensity, vibrateDuration, pishock_user.pishockUsername, pishock_user.pishockShareCode);
                 await interaction.reply(response);
-                logAction(interaction.user.id, 'vibrate', intensity, duration, pishock_user.pishockUsername);
+                logAction(interaction.user.id, 'vibrate', vibrateIntensity, vibrateDuration, pishock_user.pishockUsername);
                 found = true;
             }
         }
@@ -367,7 +375,14 @@ async function commandAdd(interaction, options) {
         // Save the config file
         await interaction.reply(`Updated user ${username}!`);
     } else {
-        config.pishock_users.push({ pishockUsername: username, pishockShareCode: sharecode });
+        config.pishock_users.push({
+            pishockUsername: username,
+            pishockShareCode: sharecode,
+            max_shock_intensity: config.defaultShockIntensity,
+            max_shock_duration: config.defaultShockDuration,
+            max_vibrate_intensity: config.defaultVibrateIntensity,
+            max_vibrate_duration: config.defaultVibrateDuration
+        });
         await interaction.reply(`Added user ${username}!`);
     }
 
@@ -504,7 +519,7 @@ async function commandShockUnban(interaction, options) {
 }
 
 async function commandConfig(interaction, options) {
-    const username = interaction.member.username;
+    const username = interaction.user.username;
 
     const maxshockintensity = options.getInteger('maxshockintensity');
     const maxshockduration = options.getInteger('maxshockduration');
