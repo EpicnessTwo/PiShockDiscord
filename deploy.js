@@ -134,6 +134,31 @@ const commands = [
     {
         name: 'list',
         description: 'List all of the known PiShock Users',
+    },
+    {
+        name: 'config',
+        description: 'Set User configuration',
+        options: [{
+            name: 'maxshockintensity',
+            type: 3,
+            description: 'The maximum shock intensity',
+            required: false,
+        }, {
+            name: 'maxshockduration',
+            type: 3,
+            description: 'The maximum shock duration',
+            required: false,
+        }, {
+            name: 'maxvibrateintensity',
+            type: 3,
+            description: 'The maximum vibration intensity',
+            required: false,
+        }, {
+            name: 'maxvibrateduration',
+            type: 3,
+            description: 'The maximum vibration duration',
+            required: false,
+        }]
     }
 ];
 
